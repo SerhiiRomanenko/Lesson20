@@ -7,7 +7,6 @@ const DOES_NOT_EXIST = -1;
 
 // MARKS
 const ZERO = 0;
-const SEVEN = 7;
 const NINE = 9;
 const TEN = 10;
 
@@ -16,91 +15,83 @@ const BIRTH_YEAR_1991 = 1991;
 const BIRTH_YEAR_1993 = 1993;
 const BIRTH_YEAR_1996 = 1996;
 
-//DESICION
+// *************************  ESSENCE
+
 const Student = function (name, surname, birthYear) {
     this.name = name;
     this.surname = surname;
     this.birthYear = birthYear;
 
-    this.getAge = function () {
-        return new Date().getFullYear() - birthYear;
-    };
-
     this.arrayWithVisits = new Array(ARRAY_LENGTH);
     this.arrayWithMarks = new Array(ARRAY_LENGTH);
+};
 
-    this.getAverageMark = function () {
-        let sum = 0;
-        for (const item of this.arrayWithMarks) {
-            if (item !== undefined) {
-                sum++;
-            }
-        }
-        let total;
-        try {
-            total = this.arrayWithMarks.reduce((accumulator, currentValue) => accumulator + currentValue);
-        } catch (error) {
-            throw new Error('too few marks');
-        }
-        return (total / sum).toFixed(ROUND_TO_ONE);
-    };
+Student.prototype.getAge = function () {
+    return new Date().getFullYear() - this.birthYear;
+};
 
-    this.present = function () {
-        const indexOfEmptyElem = this.arrayWithVisits.findIndex(item => item === undefined);
-        if (indexOfEmptyElem !== DOES_NOT_EXIST) {
-            this.arrayWithVisits[indexOfEmptyElem] = true;
-        } else if (indexOfEmptyElem === DOES_NOT_EXIST) {
-            throw new Error('no more than 10');
-        }
-        return this.arrayWithVisits;
-    };
+// *************************  PROTOTYPE
 
-    this.abscent = function () {
-        const indexOfEmptyElem = this.arrayWithVisits.findIndex(item => item === undefined);
-        if (indexOfEmptyElem !== DOES_NOT_EXIST) {
-            this.arrayWithVisits[indexOfEmptyElem] = false;
-        } else if (indexOfEmptyElem === DOES_NOT_EXIST) {
-            throw new Error('no more than 10');
+Student.prototype.getAverageMark = function () {
+    let sum = 0;
+    for (const item of this.arrayWithMarks) {
+        if (item !== undefined) {
+            sum++;
         }
-        return this.arrayWithVisits;
-    };
+    }
+    const total = this.arrayWithMarks.reduce((accumulator, currentValue) => accumulator + currentValue);
+    return (total / sum).toFixed(ROUND_TO_ONE);
+};
 
-    this.mark = function (num) {
-        const indexOfEmptyElem = this.arrayWithMarks.findIndex(item => item === undefined);
-        if (num < ZERO || num > TEN || typeof num !== 'number') {
-            throw new Error('you should put mark from 0 to 10');
-        } else if (indexOfEmptyElem !== DOES_NOT_EXIST) {
-            this.arrayWithMarks[indexOfEmptyElem] = num;
-        } else if (indexOfEmptyElem === DOES_NOT_EXIST) {
-            throw new Error('no more than 10');
-        }
-        return this.arrayWithMarks;
-    };
+Student.prototype.present = function () {
+    const indexOfEmptyElem = this.arrayWithVisits.findIndex(item => item === undefined);
+    if (indexOfEmptyElem !== DOES_NOT_EXIST) {
+        this.arrayWithVisits[indexOfEmptyElem] = true;
+    }
+    return this.arrayWithVisits;
+};
 
-    this.summary = function () {
-        let visits = ZERO;
-        let sum = 0;
-        for (const item of this.arrayWithVisits) {
-            if (item !== undefined) {
-                sum++;
-            }
-        }
-        this.arrayWithVisits.forEach(elem => {
-            if (elem === true) {
-                visits++;
-            }
-            return visits;
-        });
+Student.prototype.abscent = function () {
+    const indexOfEmptyElem = this.arrayWithVisits.findIndex(item => item === undefined);
+    if (indexOfEmptyElem !== DOES_NOT_EXIST) {
+        this.arrayWithVisits[indexOfEmptyElem] = false;
+    }
+    return this.arrayWithVisits;
+};
 
-        const averageVisits = visits / sum;
-        if (this.getAverageMark() >= COMPARISON_NUMBER_1 && averageVisits >= COMPARISON_NUMBER_2) {
-            return 'Ути какой молодчинка!';
-        } else if (this.getAverageMark() < COMPARISON_NUMBER_1 && averageVisits < COMPARISON_NUMBER_2) {
-            return 'Редиска!';
-        } else {
-            return 'Норм, но можно лучше';
+Student.prototype.mark = function (num) {
+    const indexOfEmptyElem = this.arrayWithMarks.findIndex(item => item === undefined);
+    if (num < ZERO || num > TEN || typeof num !== 'number') {
+        throw new Error('you should put mark from 0 to 10');
+    } else if (indexOfEmptyElem !== DOES_NOT_EXIST) {
+        this.arrayWithMarks[indexOfEmptyElem] = num;
+    }
+    return this.arrayWithMarks;
+};
+
+Student.prototype.summary = function () {
+    let visits = ZERO;
+    let sum = 0;
+    for (const item of this.arrayWithVisits) {
+        if (item !== undefined) {
+            sum++;
         }
-    };
+    }
+    this.arrayWithVisits.forEach(elem => {
+        if (elem === true) {
+            visits++;
+        }
+        return visits;
+    });
+
+    const averageVisits = visits / sum;
+    if (this.getAverageMark() >= COMPARISON_NUMBER_1 && averageVisits >= COMPARISON_NUMBER_2) {
+        return 'Ути какой молодчинка!';
+    } else if (this.getAverageMark() < COMPARISON_NUMBER_1 && averageVisits < COMPARISON_NUMBER_2) {
+        return 'Редиска!';
+    } else {
+        return 'Норм, но можно лучше';
+    }
 };
 
 const ivan = new Student('Ivan', 'Andreev', BIRTH_YEAR_1991);
@@ -120,11 +111,14 @@ oleh.abscent();
 oleh.mark(TEN);
 oleh.mark(TEN);
 oleh.mark(TEN);
-oleh.mark(SEVEN);
-oleh.mark(TEN);
 oleh.mark(TEN);
 oleh.mark(TEN);
 oleh.mark(NINE);
+oleh.mark(TEN);
+oleh.mark(TEN);
+oleh.mark(NINE);
+oleh.mark(NINE);
+oleh.mark(TEN); // не запишется
 ivan.mark(NINE);
 ivan.mark(NINE);
 petro.mark(NINE);
